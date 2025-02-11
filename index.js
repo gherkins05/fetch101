@@ -5,14 +5,17 @@
  * we've enabled that by default with the first line of code.
  */
 
-'use strict';
+"use strict";
 
 async function showMessage(elem, url) {
     try {
         const res = await fetch(url);
+        
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
 
         elem.textContent = await res.text();
-
     } catch (err) {
         console.log(err);
     }
@@ -21,13 +24,18 @@ async function showMessage(elem, url) {
 async function showList(elem, url) {
     try {
         const res = await fetch(url);
+
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
         const data = await res.json();
 
-        data.forEach(item => {
-            const li = document.createElement('li');
+        data.forEach((item) => {
+            const li = document.createElement("li");
             li.textContent = item;
             elem.appendChild(li);
-        })
+        });
     } catch (err) {
         console.log(err);
     }
@@ -37,9 +45,15 @@ function startShowingMessage(elem, url) {
     setInterval(async () => {
         try {
             const res = await fetch(url);
-            elem.textContent = await res.text();
 
-        } catch (err) { console.log(err) }
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+
+            elem.textContent = await res.text();
+        } catch (err) {
+            console.log(err);
+        }
     }, 1000);
 }
 
@@ -52,8 +66,8 @@ async function handleError(elem, url) {
         } else {
             elem.textContent = await res.text();
         }
-    } catch(err) {
-        elem.textContent = 'OH DEAR';
+    } catch (err) {
+        elem.textContent = "OH DEAR";
         console.log(err);
     }
 }
@@ -64,9 +78,11 @@ function drawBox(canvas, url) {
             const res = await fetch(url);
             const data = await res.json();
 
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#000000';
+            const ctx = canvas.getContext("2d");
+            ctx.fillStyle = "#000000";
             ctx.fillRect(data.x, data.y, 10, 10);
-        } catch(err) { console.log(err); }
+        } catch (err) {
+            console.log(err);
+        }
     }, 1000);
 }
