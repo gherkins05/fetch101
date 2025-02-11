@@ -81,6 +81,7 @@ function drawBox(canvas, url) {
             const ctx = canvas.getContext("2d");
             ctx.fillStyle = "#000000";
             ctx.fillRect(data.x, data.y, 10, 10);
+            
         } catch (err) {
             console.log(err);
         }
